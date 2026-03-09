@@ -1,0 +1,41 @@
+# NN4Soot mechanism similarity analysis config
+# Run: python scripts/run_mechanism_similarity.py --config configs/mechanism_similarity_config.yaml
+
+# ─── Global paths ─────────────────────────────────────────────────────────────────
+data_dir:    data/          # Data root; must contain UF_set1/ UF_set2/ UF_set3/
+model_dir:   pretrained/    # Model directory
+output_dir:  results/UF_Comparison_Results  # Result output directory
+
+# ─── Analysis parameters ─────────────────────────────────────────────────────────────────
+analysis:
+  hp_values:      [0.50, 0.70, 1.00]   # Height positions (cm)
+  bin_indices:    [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  n_bootstrap:    1000                  # Bootstrap sample count
+  top_k:          4                     # Number of top-k most sensitive parameters
+
+  # UF comparison pairs: (uf_a, uf_b) means UF_set{a} vs UF_set{b}
+  # In source order: (2,10)=set1-3, (5,10)=set2-3, (2,5)=set1-2
+  uf_pairs:
+    - [2, 10]
+    - [5, 10]
+    - [2, 5]
+
+  # y-axis labels (one-to-one with uf_pairs)
+  pair_labels:
+    - "UF set1-3"
+    - "UF set2-3"
+    - "UF set1-2"
+
+# ─── Per UF set config ───────────────────────────────────────────────────────────
+uf_sets:
+  UF_set1:
+    uf_value: 2     # UF value in data/model files
+  UF_set2:
+    uf_value: 5
+  UF_set3:
+    uf_value: 10
+
+# ─── Cache settings ─────────────────────────────────────────────────────────────────
+cache:
+  use_cache:  true              # Whether to use npz cache to speed up repeated runs
+  cache_file: results/UF_Comparison_Results/UF_mechanism_similarity_cache.npz

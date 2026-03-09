@@ -1,0 +1,62 @@
+# NN4Soot training config
+# Run: python scripts/train_from_config.py --config configs/train_config.yaml
+
+# ─── Global paths ─────────────────────────────────────────────────────────────────
+data_dir:    data/          # Data root; must contain UF_set1/ UF_set2/ UF_set3/
+output_dir:  pretrained/    # Model output directory
+
+# ─── Global training hyperparameters ─────────────────────────────────────────────
+global:
+  hp_values:    [0.50, 0.70, 1.00]   # Height positions (cm)
+  n_samples:    768
+  random_seed:  20
+  # BIN column slice [start, stop] (Python slice(start, stop))
+  # Default [3, 23] = columns 3~22, 20 BINs;
+  # If data has different column count, change here only, no Python code changes needed
+  bin_slice:    [3, 23]
+  num_epochs:   20000
+  batch_size:   64
+  test_size:    0.2                  # Validation set ratio
+  weight_decay: 1.0e-4
+  early_stop_patience:   1000
+  early_stop_min_delta:  1.0e-5
+
+# ─── Per UF set learning rate schedule ───────────────────────────────────────────
+# Key = epoch number, value = learning rate from that epoch onward
+uf_sets:
+
+  UF_set1:
+    enabled: true
+    uf_value: 2          # UF value in data files
+    lr_schedule:
+      0:     0.0005
+      1000:  0.00025
+      2000:  0.0001
+      5000:  0.000075
+      7000:  0.00005
+      10000: 0.00004
+      15000: 0.00003
+
+  UF_set2:
+    enabled: false
+    uf_value: 5
+    lr_schedule:
+      0:     0.001
+      1000:  0.00075
+      2000:  0.0005
+      5000:  0.00025
+      7000:  0.0001
+      10000: 0.00009
+      15000: 0.00008
+
+  UF_set3:
+    enabled: false
+    uf_value: 10
+    lr_schedule:
+      0:     0.001
+      1000:  0.00075
+      2000:  0.0005
+      5000:  0.00025
+      7000:  0.0001
+      10000: 0.00009
+      15000: 0.00008

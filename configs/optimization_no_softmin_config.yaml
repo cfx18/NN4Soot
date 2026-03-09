@@ -1,0 +1,137 @@
+# NN4Soot gradient optimization config
+# Run: python scripts/run_optimization.py --config configs/optimization_config.yaml
+
+# ─── Global paths ─────────────────────────────────────────────────────────────────
+data_dir:    data/          # Data root directory
+model_dir:   pretrained/    # Model directory
+output_dir:  results/opt_no_softmin       # Output root; actual writes go to {output_dir}/UF_set{X}/
+                             # When comparing configs, change only this line, e.g.:
+                             #   output_dir: results/opt_no_softmin
+                             #   output_dir: results/opt_softmin_w100
+
+# ─── Target UF set ──────────────────────────────────────────────────────────────
+uf_set: [1,2,3]                   # UF set indices to use (1=UF2, 2=UF5, 3=UF10)
+
+# ─── Optimization parameters ─────────────────────────────────────────────────────────────────
+optimization:
+  hp_values:       [0.50, 0.70, 1.00]   # Height positions (cm) for optimization; each Hp loads its corresponding model
+  # 0-based indices of parameters to optimize (edit manually as needed)
+  # ── Reference: Top-4 global sensitivity (UF=10, from UF_Top4_Params_MeanSensitivity_overBINxHp.xlsx) ──
+  #   Rank 1 → P1  (index 0,  mean_sens=0.428)
+  #   Rank 2 → P2  (index 1,  mean_sens=0.316)
+  #   Rank 3 → P7  (index 6,  mean_sens=0.091)
+  #   Rank 4 → P8  (index 7,  mean_sens=0.081)
+  optimize_params: [0, 1]
+
+  num_epochs:      1500                 # Max number of iterations
+  initial_lr:      0.01                 # Initial learning rate
+  early_stop_patience: 20              # Early stopping patience
+  early_stop_min_delta: 1.0e-6         # Early stopping minimum improvement
+
+  # BIN range
+  # original_setting: false → determined automatically from experimental data coverage
+  # original_setting: true  → use bin_ranges below (empty = paper defaults)
+  original_setting: false
+  bin_ranges:           # Only when original_setting: true; format Hp: [lo, hi] (0-based)
+    0.50: [1, 12]
+    0.70: [2, 14]
+    1.00: [2, 16]
+
+  # Softmin loss (optional, for targeting a specific size BIN)
+  use_softmin: false
+  softmin_hp:        0.70
+  softmin_bin_index: 5        # BIN = softmin_bin_index + 4
+  softmin_weight:    50.0    # softmin amplification factor
+
+# ─── Parameter denormalization (per UF set) ──────────────────────────────────
+# Denormalization formulas (same as sampling scripts a_gen_samples_split_newEaNew_noNH_UF*.py):
+#   A : true_A  = A_base^(normed*(A_upper-A_lower)+A_lower) * nominal
+#   n : true_n  = (normed*(n_upper-n_lower)+n_lower) + nominal
+#   Ea: true_Ea = (normed*(Ea_upper-Ea_lower)+Ea_lower) * nominal
+#
+# Indices are 0-based positions in the parameter dict (order from Input_ArrheniusGlobal_noNH.txt)
+
+recovery:
+
+  # ── UF set 1 (UF=2) ──────────────────────────────────────────────────────
+  UF_set1:
+    uf_value:    2
+    A_base:      2.0
+    A_indices:   [0, 1, 2, 3, 6, 8]
+    n_indices:   [7]
+    Ea_indices:  [4, 5, 9]
+    A_lower:     -1.0
+    A_upper:      1.0
+    n_lower:     -0.3
+    n_upper:      0.3
+    Ea_lower:     0.8
+    Ea_upper:     1.2
+    # Solver template file path (absolute or relative to working directory)
+    global_file:  data/UF_set1/Input_ArrheniusGlobal_noNH.txt
+    input_file:   data/UF_set1/input.txt
+    # Output naming templates (optional)
+    output_subdir_template: opt_UF={uf}
+    global_filename_template: Input_ArrheniusGlobal_000.txt
+    input_filename_template: input_000.txt
+    soot_output_filename_template: A_Soot_000.txt
+
+  # ── UF set 2 (UF=5) ──────────────────────────────────────────────────────
+  UF_set2:
+    uf_value:    5
+    A_base:      5.0
+    A_indices:   [0, 1, 2, 3, 6, 8]
+    n_indices:   [7]
+    Ea_indices:  [4, 5, 9]
+    A_lower:     -1.0
+    A_upper:      1.0
+    n_lower:     -0.3
+    n_upper:      0.3
+    Ea_lower:     0.8
+    Ea_upper:     1.2
+    global_file:  data/UF_set2/Input_ArrheniusGlobal_noNH.txt
+    input_file:   data/UF_set2/input.txt
+    output_subdir_template: opt_UF={uf}
+    global_filename_template: Input_ArrheniusGlobal_000.txt
+    input_filename_template: input_000.txt
+    soot_output_filename_template: A_Soot_000.txt
+
+  # ── UF set 3 (UF=10) ─────────────────────────────────────────────────────
+  UF_set3:
+    uf_value:    10
+    A_base:      10.0
+    A_indices:   [0, 1, 2, 3, 6, 8]
+    n_indices:   [7]
+    Ea_indices:  [4, 5, 9]
+    A_lower:     -1.0
+    A_upper:      1.0
+    n_lower:     -0.3
+    n_upper:      0.3
+    Ea_lower:     0.8
+    Ea_upper:     1.2
+    global_file:  data/UF_set3/Input_ArrheniusGlobal_noNH.txt
+    input_file:   data/UF_set3/input.txt
+    output_subdir_template: opt_UF={uf}
+    global_filename_template: Input_ArrheniusGlobal_000.txt
+    input_filename_template: input_000.txt
+    soot_output_filename_template: A_Soot_000.txt
+
+# ─── SootGEN run config (optional) ──────────────────────────────────────────────
+# After parameter recovery writes input_*.txt etc., SootGEN runs in the same subdir,
+# producing A_Soot_*.txt; then gen_kinetics can embed it into the CKI template.
+sootgen:
+  enabled: true          # true = run SootGEN automatically after recovery
+  sootgen_bin_dir: nn4soot/utils/gen_kinetic/SOOTGEN/bin   # Directory containing SootGEN.sh
+  sootgen_lib_dir: nn4soot/utils/gen_kinetic/SOOTGEN/lib   # LD_LIBRARY_PATH path
+  cleanup_work_dir: true # true = remove sootgen_tmp_*/ after run, keep only A_Soot_*.txt
+                          # false = keep temp dirs for debugging intermediate files
+
+  # ── CKI template embedding (optional) ──────────────────────────────────────
+  gen_kinetics:
+    enabled: true          # true = run gen_kinetics step after SootGEN
+    template_folder: "data/Kinetics_inputs_template"     # Kinetics_inputs_template folder path (required)
+    target_file_name: kinetics.CHEMKIN_base3pp.CKI
+    input_dic_file_name: input.dic
+    output_folder_pattern: "Kinetics_inputs_{index}"
+    output_label_prefix: kinetics-base3
+    read_start_line: 197    # Line in A_Soot file to start reading (inclusive)
+    write_start_line: 18088 # Line in CKI file to insert at (inclusive)

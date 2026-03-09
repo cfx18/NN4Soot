@@ -1,0 +1,312 @@
+//********************************************************************************************
+//@Reaction {"Reactant1","Reactant2","Productmain","ProductGas"}, i.e., Reactant1 + Reactant2 --> ProductBIN + ProductGas
+//@Reaction { "R_Abstraction"} is an exception to call R+BIN>RH+BINJ reaction
+//********************************************************************************************
+
+// PAHRadical + PAHRadical (if nC_reactants >= 20)  	with Aref = Aradrad; nref = nradrad; Eref = Eradrad_Resonant/Eradrad_NonResonant/Eradrad_NonResonant_Resonant 
+@Reaction  { "PAHRadical", "PAHRadical","BIN",""}                   // 1. 
+
+// PAHRadical + PAHMolecule (if nC_reactants >= 20) 	with Aref = Amolrad; nref = nmolrad; Eref = Eradrad_Resonant/Eradrad_NonResonant
+@Reaction  { "PAHRadical", "PAHMolecule", "BIN", ""}                // 2.
+
+// C16H10 + C16H10					with Aref = Amolmol_dummy; nref = nmolmol_dummy; Eref = Emolmol_dummy
+@Reaction  { "PAHMolecule", "PAHMolecule", "BIN", ""}               // 3.
+
+
+
+// BIN1-3(and 4J) + PAHRadical 				with Aref = Amolrad; nref = nmolrad; Eref = Eradrad_Resonant/Eradrad_NonResonant
+// BIN5-24J + PAHRadical 				with Aref = Apahbin1; nref = npahbin1; Eref = Epahbin1
+@Reaction  { "BIN", "PAHRadical", "BIN", ""}                        // 4.
+
+// BIN1-3J + PAHRadical 				with Aref = Aradrad; nref = nradrad; Eref = Eradrad_Resonant/Eradrad_NonResonant/Eradrad_NonResonant_Resonant
+@Reaction  { "BINJ", "PAHRadical", "BIN", ""}                       // 5.  
+
+// BIN1-3J + PAHMolecule  				with Aref = Amolrad; nref = nmolrad; Eref = Emolrad_NonResonant
+// BIN4J + PAHMolecule  				with Aref = Amolrad; nref = nmolrad; Eref = Emolrad_NonResonant2
+// BIN5-24J + PAHMolecule  				with Aref = Apahbin1; nref = npahbin1; Eref = Emolrad_NonResonant2
+@Reaction  { "BINJ", "PAHMolecule", "BIN", ""}                      // 6.
+
+
+
+// BIN1-3J + BIN1-4J 					with Aref = AbinGasbinGas; nref = npahbin1; Eref = Eradrad_Resonant
+// BIN1-3J + BIN5-12J 					with Aref = AbinGasbinPar; nref = nbinGasbinPar; Eref = EbinGasbinPar
+// BIN1-3J + BIN13-24J 					with Aref = AbinGasbinAgg; nref = nbinGasbinAgg; Eref = EbinGasbinAgg
+@Reaction  { "BINJ", "BINJ", "BIN", ""}                             // 7. 
+
+// BIN1-3J + BIN1-3 					with Aref = Apahbin1; nref = npahbin1; Eref = Epahbin1
+@Reaction  { "BINJ", "BIN", "BIN", ""}                              // 8.
+
+// BIN1-3(and 4J) + BIN1-3(and 4J)			with Aref = AbinGasbinGas; nref = nmolmol_dummy; Eref = Emolmol_dummy
+// BIN1-3 + BIN5-12J					with Aref = AbinGasbinPar; nref = nbinGasbinPar; Eref = EbinGasbinPar
+// BIN1-3 + BIN13-24J					with Aref = AbinGasbinAgg; nref = nbinGasbinAgg; Eref = EbinGasbinAgg
+// BIN5-12J + BIN5-12J 					with Aref = AbinParbinPar; nref = nbinParbinPar; Eref = EbinParbinPar _AbinParLiq_
+// BIN5-12J + BIN13-24J					with Aref = AbinParbinAgg; nref = nbinParbinAgg; Eref = EbinParbinAgg _AbinParLiq_
+// BIN13-24J + BIN13-24J				with Aref = AbinAggbinAgg; nref = nbinAggbinAgg; Eref = EbinAggbinAgg _AbinParLiq_
+@Reaction  { "BIN", "BIN", "BIN", ""}                               // 9. 
+
+// C2H2 + BIN1-3J -> BIN1-3(and 4J)			with Aref = AC2H2_mol; nref = nC2H2_mol; Eref = EC2H2_mol
+@Reaction  { "C2H2", "BINJ", "BIN", "" }                            // 10.
+
+// C2H2 + BIN1-3J -> BIN1-4J				with Aref = AC2H2_rad; nref = nC2H2_rad; Eref = EC2H2_rad
+// C2H2 + BIN1-4J -> BIN4-25J				with Aref = AC2H2_rad; nref = nC2H2_rad; Eref = EC2H2_rad2
+@Reaction  { "C2H2", "BINJ", "BINJ", ""}                            // 11.
+
+// BIN1-3(and 4-24J) + C3H3/C4H3/C4H5/C5H5  		see @SurfaceGrowthList in input.txt file
+@Reaction  { "SurfaceGrowthResonantRadicals", "BIN", "BIN", "" }    // 12.
+
+// BIN1-3J + C3H3/C4H3/C4H5/C5H5  			see @SurfaceGrowthList in input.txt file
+@Reaction  { "SurfaceGrowthResonantRadicals", "BINJ", "BIN", "" }   // 13.
+
+
+
+// BIN1-3J + H -> BIN1-3			  	with Aref = Ahbinj; nref = nhbinj; Eref = Ehbinj
+@Reaction  { "BINJ","H", "BIN", ""}                                 // 14.
+
+// BIN1-3 -> BIN1-3J + H				with Aref = Ahloss; nref = nhloss; Eref = Ehloss
+@Reaction  { "", "BIN", "BINJ",""}                                  // 15.
+
+// BIN1-3J -> BIN1-3 + H				with Aref = Adehloss; nref = ndehloss; Eref = Edehloss
+@Reaction  { "BINJ", "", "BIN", ""}                                 // 16.
+
+// BIN1-3 -> BIN1-3J + H				with Aref = Adeh2loss; nref = ndeh2loss; Eref = Edeh2loss
+@Reaction  { "BIN", "", "BIN", "H2"}                                // 17.
+
+// BIN1-25J -> BIN1-25J + H2				with Aref = Adeh2loss; nref = ndeh2loss; Eref = Edeh2loss
+@Reaction  { "BINJ", "", "BINJ", "H2"}                              // 18.
+
+// H + BIN1-3(and4-25J) -> BIN1-3(and4-25J) + CH3	with Aref = Adem; nref = ndem; Eref = Edem
+@Reaction  { "H", "BIN", "BIN", "CH3"}                              // 19.
+
+// CH3 + BIN1-3(and4-25J) -> BIN1-3(and4-25J) + H	with Aref = Amet; nref = nmet; Eref = Emet
+@Reaction  { "CH3", "BIN", "BIN", "" }                              // 20.
+
+// BIN1-3 + R -> BIN1-3J + RH				see @HFAbstractionList in input.txt file
+@Reaction  { "HFAbstraction", "BIN", "BINJ", "" }                   // 21f.
+
+// BIN1-3J + RH -> BIN1-3 + R				see @HFAbstractionList in input.txt file
+@Reaction  { "HBAbstraction", "BINJ", "BIN", "" }                   // 21b.
+
+
+
+// OH + BIN1-3(and4-25J) -> BIN1-3(and4-25J) + CO+CH3	with Aref = Aox3; nref = nox3; Eref = Eox3
+@Reaction  { "OH", "BIN", "BIN", "CO+CH3"}                          // 22. 
+
+// OH + BIN1-3(and4-25J) -> BIN1-25J + CH2CO		with Aref = Aox4; nref = nox4; Eref = Eox4
+@Reaction  { "OH", "BIN", "BINJ", "CH2CO"}                          // 23.  
+
+// OH + BIN1-25J -> BIN1-25J + CO+H			with Aref = Aox5; nref = nox5; Eref = Eox5 Aoxdanna1_A
+@Reaction  { "OH", "BINJ", "BINJ", "CO+H"}                          // 24.  
+
+// OH + BIN1-3(and4-25J) -> BIN1-3(and4-25J) + HCO	with Aref = Aoxdanna1_A; nref = noxdanna1_A; Eref = Eoxdanna1_A
+@Reaction  { "OH", "BIN", "BIN", "HCO" }                            // 25.
+
+// O + BIN1-3(and4-25J) -> BIN1-25J + HCCO	with Aref = Aox6; nref = nox6; Eref = Eox6
+@Reaction  { "O", "BIN", "BINJ", "HCCO"}                            // 26. 
+
+// O + BIN1-25J -> BIN1-25J + CO			with Aref = Aox7; nref = nox7; Eref = Eox7
+@Reaction  { "O", "BINJ", "BINJ", "CO" }                            // 27. 
+
+// HO2 + BIN1-25J -> BIN1-25J + OH+CO		with Aref = Aox8; nref = nox8; Eref = Eox8
+@Reaction  { "HO2", "BINJ", "BINJ", "OH+CO" }                       // 28.  
+
+// O2 + BIN1-3J -> BIN1-3J + CO+HCO			with Aref = Aox1; nref = nox1; Eref = Eox1
+@Reaction  { "O2", "BINJ", "BIN", "CO+HCO"}                         // 29. 
+
+// O2 + BIN4-25J -> BIN4-25J + CO2			with Aref = AoxO2_CO2; nref = noxO2_CO2; Eref = EoxO2_CO2
+@Reaction  { "O2", "BINJ", "BINJ", "CO2" }                          // 30. 
+
+// O2 + BIN4-25J -> BIN4-25J + CO+H2O		with Aref = AoxO2_CO_H2O; nref = noxO2_CO_H2O; Eref = EoxO2_CO_H2O
+@Reaction  { "O2", "BINJ", "BINJ", "CO+H2O" }                       // 31.
+
+// O2 + BIN1-25J -> BIN1-25J + CO+O			with Aref = AoxO2_CO_O; nref = noxO2_CO_O; Eref = EoxO2_CO_O
+@Reaction  { "O2", "BINJ", "BINJ", "CO+O" }                         // 32.
+
+// O2 + BIN1-25J -> BIN1-25J + 2CO			with Aref = AoxO2_2CO; nref = noxO2_2CO; Eref = EoxO2_2CO
+@Reaction  { "O2", "BINJ", "BIN", "2CO" }                           // 33.
+
+// O2 + BIN13-25J -> BINfragmentation + 2CO	with Aref = Aaggfragm; nref = naggfragm; Eref = Eaggfragm
+@ReactionDUP  { "O2", "BINJ","BINJ","2CO","0.5"}                    // 34.
+
+
+// Additional reaction class for BIN+NO and BIN+NH2 reactions (default: not included. Uncomment to include them in the model)
+//@Reaction  { "NO", "BINJ", "BINJ", "OH+HCN" }
+//@Reaction  { "NH2", "BINJ", "BINJ", "H+HCN" }
+//@Reaction  { "NO", "BIN", "BIN", "OH+HCN" }
+//@Reaction  { "NH2", "BIN", "BIN", "H+HCN" }
+
+
+//********************************************************************************************
+// If you want to use the default value from HT1311s, open and closed curly bracket ({}) should be commented(//)
+//********************************************************************************************
+@GlobalValue {  //variable name cannot be changed. 
+
+	AbinGasbinGas 	 				1.6e10;
+	AbinGasbinPar 	 				1.6e10;
+	AbinGasbinAgg 	 				1.6e10;
+	AbinParbinPar 	 				1.6e10;
+	AbinParbinAgg 	 				1.6e10;
+	AbinAggbinAgg 	 				1.6e10;
+
+    AbinParLiq                      1.6e9;
+
+}
+
+//********************************************************************************************
+// Reference rate parameters of the BIN reaction classes
+//********************************************************************************************
+
+    AoxO2_CO2                       3.45E+8;   // ref: J. Phys. Chem. A. 119 (2015) 7528-7547
+    noxO2_CO2                       0;         // ref: J. Phys. Chem. A. 119 (2015) 7528-7547
+    EoxO2_CO2                       26669.51;  // ref: J. Phys. Chem. A. 119 (2015) 7528-7547
+       
+    AoxO2_CO_H2O                    3.54E+3;   // ref: Phys. Chem. Chem. Phys. 20 (2018) 10607-10627
+    noxO2_CO_H2O                    1.483;     // ref: Phys. Chem. Chem. Phys. 20 (2018) 10607-10627
+    EoxO2_CO_H2O                    16508;     // ref: Phys. Chem. Chem. Phys. 20 (2018) 10607-10627
+    
+    AoxO2_CO_O                      2.60E+10;  // as Aox2
+    noxO2_CO_O                      0;         // as nox2
+    EoxO2_CO_O                      9120;      // as Eox2 + 3000 cal/mol
+    
+    AoxO2_2CO                       4.20E+8;   // as Aoxdanna2_B
+    noxO2_2CO                       0.5;       // as noxdanna2_B
+    EoxO2_2CO                       11000;     // as noxdanna2_B + 3000 cal/mol
+    
+	AoxNO							2.84E+10;		// Find more reliable parameters 
+	noxNO							0.0;		// Find more reliable parameters
+	EoxNO_BINrad					5000; 		// Find more reliable parameters
+	EoxNO_BINrsr					8000; 		// Find more reliable parameters
+	EoxNO_BINmol					11000; 		// Find more reliable parameters
+
+	AremoveCbyNH2					5e+10;		// Find more reliable parameters 
+	nremoveCbyNH2					0.0;		// Find more reliable parameters
+	EremoveCbyNH2_BINrad			5000; 		// Find more reliable parameters
+	EremoveCbyNH2_BINrsr			8000; 		// Find more reliable parameters
+	EremoveCbyNH2_BINmol			11000; 		// Find more reliable parameters
+
+	//For PAHs-PAHs Reactions & PAH+BINs(<sootstart) & BINs(<sootstart)+BINs(<sootstart)
+	Aradrad 	 					1.00E+09;		//A factor of the reference reaction for radical-radical reactions  m3/kmol/s
+	nradrad 	 					0;				//n parameter of the reference reaction for radical-radical reactions
+	Eradrad_NonResonant_ 	 		0;				//Activation energy of the reference reaction for radical-radical reactions (both non-resonant)
+	Eradrad_NonResonant_Resonant 	3000;			//Activation energy of the reference reaction for radical-radical reactions (one resonant, one not)
+	Eradrad_Resonant 	 			6000;			//Activation energy of the reference reaction for radical-radical reactions (both resonant)
+	Amolrad 	 					1.00E+09;		//A factor of the reference reaction for molecule-radical reactions  m3/kmol/s
+	nmolrad 	 					0;				//n parameter of the reference reaction for molecule-radical reactions
+	Emolrad_NonResonant2							//Activation energy of the reference reaction for molecule-BIN4-25J reactions
+	Emolrad_NonResonant 	 		8000;			//Activation energy of the reference reaction for molecule-radical reactions (non-resonant radical)
+	Emolrad_Resonant 	 			19000;			//Activation energy of the reference reaction for molecule-radical reactions (resonant radical)
+	
+	//Dummy Mol-Mol number from Pyrene applies only to pyrene + pyrene
+	Amolmol_dummy 	 				1e6;
+	nmolmol_dummy 	 				0.5;
+	Emolmol_dummy 	 				0;
+
+	//PAH-BIN   provided in input for f90 version for write_bin_bin
+	Apahbin1 	 					5.00E+11;		//A factor for PAH - BIN reactions
+	npahbin1 	 					0.5;			//n parameter for PAH - BIN reactions
+	Epahbin1 	 					0.;				//Activation energy for PAH - BIN reactions
+
+	AbinGasbinGas	 	 			3E+11;			// A factor for BIN1-4 vs BIN13+ reactions
+
+	//New parameter 1
+	AbinGasbinPar	 	 			3E+11;			// A factor for BIN1-4 vs BIN5+12 reactions			
+	nbinGasbinPar	 	 			0.5	;			// n parameter  for BIN1-4 vs BIN5+12 reactions		
+	EbinGasbinPar	 	 			0;				// Activation energy  BIN1-4 vs BIN5+12 reactions		
+	//New parameter 2
+	AbinGasbinAgg	 	 			3E+11;			// A factor for BIN1-4 vs BIN13+ reactions			
+	nbinGasbinAgg	 	 			0.5	;			// n parameter  for BIN1-4 vs BIN13+ reactions		
+	EbinGasbinAgg	 	 			0;				// Activation energy  BIN1-4 vs BIN13+ reactions	
+
+	//BIN-BIN for Bin5-12 with themselves
+	AbinParbinPar 	 				2E+11;			// A factor for Bin5-12 with themselves
+	nbinParbinPar 	 				0.5;			// n parameter for Bin5-12 with themselves
+	EbinParbinPar 	 				0;				// Activation energy for Bin5-12 with themselves
+
+	//BIN-BIN for Bin5-12 with Bin13+  
+	AbinParbinAgg 	 				1.5E+11;		// A factor for Bin5-12 with Bin13+  
+	nbinParbinAgg 	 				0.5;			// n parameter for Bin5-12 with Bin13+  
+	EbinParbinAgg 	 				0;				// Activation energy for Bin5-12 with Bin13+  
+
+	//BIN-BIN for Bin13+  with Bin13+  
+	AbinAggbinAgg 	 				1.5E+11;		// A factor for Bin13+ with Bin13+  
+	nbinAggbinAgg 	 				0.5;			// n parameter for Bin13+ with Bin13+  
+	EbinAggbinAgg 	 				0;				// Activation energy for Bin13+ with Bin13+  
+
+	//C2H2 with BIN or BINJ reaction
+	AC2H2_mol 	 					1e9;      			// A factor for C2H2 reactions to form mol + H
+	nC2H2_mol 	 					0;					// n parameter for C2H2 reactions to form mol + H
+	EC2H2_mol 	 					5000;				// Activation energy for C2H2 reactions to form mol + H
+	AC2H2_rad 	 					1e9;      			// A factor for C2H2 reactions to form rad(+H2)
+	nC2H2_rad 						0;					// n parameter for C2H2 reactions to form rad(+H2)
+	EC2H2_rad 	 					5000;				// Activation energy for C2H2 reactions to form rad(+H2)
+    EC2H2_rad2                     20000;               // ANimplementation: for BIN > BINRadicalMax
+	
+    // Hydrogen Addition to BINJ  [H+BINJ	>BIN]
+	Ahbinj 	 					1.00E+11;				//	A factor for H - BINJ reactions
+	nhbinj 	 					0;						//	n parameter for H - BINJ reactions
+	Ehbinj 	 					0;						//	Activation energy for H - BINJ reactions
+	
+	// Hloss  [BIN	>BINJ+H]
+	Ahloss 	 					1.50E+17;				//	A factor for unimolecular H loss
+	nhloss 	 					0;						//	n parameter for unimolecular H loss
+	Ehloss 	 					114000;					//	Activation energy for unimolecular H loss
+
+	// Dehydrogenation of BINJ  [BINJ -> BIN+H]
+	Adehloss 	 				1.00E+11;				// A factor for dehydrogenation with H loss
+	ndehloss 	 				0;						//	n parameter for dehydrogenation with H loss
+	Edehloss 	 				12000;					//	Activation energy for dehydrogenation with H loss
+
+	//	Dehydrogenation of BIN/BINJ [BIN/BINJ->BIN/BINJ + H2]
+	Adeh2loss 	 				1.00E+08;				//	A factor for dehydrogenation with H2 loss
+	ndeh2loss 	 				0;						//	n parameter for dehydrogenation with H2 loss
+	Edeh2loss 	 				32000;					//	Activation energy for dehydrogenation with H2 loss
+
+	//	Demethylation of BINs
+	Adem 	 					1.20E+10;				//	A factor for demethylation reactions
+	ndem 	 					0;						//	n parameter for demethylation reactions
+	Edem 	 					5000;					//	Activation energy for demethylation reactions
+
+	//	BIN + Methyl
+	Amet 	 					1.20E+09;				//	A factor for methyl + BIN reactions
+	nmet 	 					0;						//	n parameter for methyl + BIN reactions
+	Emet 	 					16000;					//	Activation energy for methyl + BIN reactions
+
+	//**************************************************************************************************************************
+	//									            		Oxidation
+	//**************************************************************************************************************************
+	Aox1 	 					2.10E+09; 					//	A factor for the reaction O2+BINJ>BIN+CO+HCO
+	nox1 	 					0		;					//	n parameter for the reaction O2+BINJ>BIN+CO+HCO
+	Eox1 	 					7400	;					//	Activation energy for the reaction O2+BINJ>BIN+CO+HCO
+	Aox2 	 					2.60E+10;					//	A factor for the reaction O2+BINJ>BINJ+CO+O
+	nox2 	 					0		;					//	n parameter for the reaction O2+BINJ>BINJ+CO+O
+	Eox2 	 					6120	;					//	Activation energy for the reaction O2+BINJ>BINJ+CO+O
+	Aox3 	 					1.00E+10;					//	A factor for the reaction OH+BIN>BIN+CO+CH3
+	nox3 	 					0		;					//	n parameter for the reaction OH+BIN>BIN+CO+CH3
+	Eox3 	 					4000	;					//	Activation energy for the reaction OH+BIN>BIN+CO+CH3
+	Aox4 	 					1.00E+10;					//	A factor for the reaction OH+BIN>BINJ+CH2CO
+	nox4 	 					0		;					//	n parameter for the reaction OH+BIN>BINJ+CH2CO
+	Eox4 	 					10000	;					//	Activation energy for the reaction OH+BIN>BINJ+CH2CO
+	Aox5                        1.73E+14;	                //  A factor for the reaction OH+BINJ>BINJ+CO+H			ref: Combust. Flame. 187 (2018) 147�164; in Kik was 2E+11 
+	nox5                        -1.07   ;	                //  n parameter for the reaction OH+BINJ>BINJ+CO+H		ref: Combust. Flame. 187 (2018) 147�164; ik Kik was 0 
+	Eox5                        1630    ;      	            //  Activation energy for the reaction OH+BINJ>BINJ+CO+H ref: Combust. Flame. 187 (2018) 147�164; in Kik was 0 
+	Aox6 	 					2.00E+10;					//	A factor for the reaction O+BIN>BINJ+HCCO
+	nox6 	 					0		;					//	n parameter for the reaction O+BIN>BINJ+HCCO
+	Eox6 	 					4000	;					//	Activation energy for the reaction O+BIN>BINJ+HCCO
+	Aox7 	 					5.00E+10	;				//	A factor for the reaction O+BINJ>BINJ+CO
+	nox7 	 					0	;						//	n parameter for the reaction O+BINJ>BINJ+CO
+	Eox7 	 					0	;						//	Activation energy for the reaction O+BINJ>BINJ+CO
+	Aox8 	 					1.00E+10;					//	A factor for the reaction HO2+BINJ>BINJ+CO+OH
+	nox8 	 					0	;						//	n parameter for the reaction HO2+BINJ>BINJ+CO+OH
+	Eox8 	 					0	;						//	Activation energy for the reaction HO2+BINJ>BINJ+CO+OH
+
+	Aoxdanna1_A 	 			3.0E9 ;						//	factor for the reaction OH+BIN>BIN+HCO
+	noxdanna1_A 	 			0.5	;						//	n parameter for the reaction OH+BIN>BIN+HCO
+	Eoxdanna1_A 	 			10600;						//	Activation energy for the reaction OH+BIN>BIN+HCO
+
+	Aoxdanna2_B 	 			4.20E+8	;					//	A factor for the reaction O2+BINJ>BIN+2CO
+	noxdanna2_B 	 			0.5;						//	n parameter for the reaction O2+BINJ>BIN+2CO
+	Eoxdanna2_B 	 			8000;						//	Activation energy for the reaction O2+BINJ>BIN+2CO
+    
+    Aaggfragm = 4.30E-05;		// A factor for aggregate fragmentation into other aggregates + 2CO (from Sirignano 2013, A=alpha*4.3E-3, with alpha=0.01)
+	naggfragm = 0.0;			// n parameter for aggregate fragmentation into other aggregates + 2CO
+	Eaggfragm = 11000;	    	// Activation energy for aggregate fragmentation into other aggregates + 2CO
+

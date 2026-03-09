@@ -1,0 +1,140 @@
+@PauseOption        { true } 
+@OutputFileName     { A_Soot_001.txt }
+@OutputFormat       { OpenSMOKE }
+@ModuleName         { SOOT }       
+@WriteSpeciesHeader { true }      
+
+@BINList{
+	
+BIN1      	3         	20          	8.000E-1  	5.000E-1  	3.0000000000E-1	
+BIN2      	3         	40          	8.000E-1  	4.000E-1  	2.0000000000E-1  
+BIN3      	3         	80          	7.500E-1  	3.000E-1  	1.0000000000E-1
+BIN4      	3         	160         	7.250E-1  	2.000E-1  	6.2500000000E-2
+BIN5      	3         	320         	7.000E-1  	2.000E-1  	5.6250000000E-2
+BIN6      	3         	640         	6.750E-1  	2.000E-1  	5.3125000000E-2
+BIN7      	3         	1250        	6.500E-1  	2.000E-1  	5.2000000000E-2
+BIN8      	3         	2500        	6.250E-1  	2.000E-1  	5.0400000000E-2
+BIN9      	3         	5000        	6.000E-1  	2.000E-1  	5.0200000000E-2
+BIN10     	3         	10000       	5.750E-1  	2.000E-1  	5.0100000000E-2
+BIN11     	3         	20000       	5.500E-1  	2.000E-1  	5.0050000000E-2
+BIN12     	3         	40000       	5.250E-1  	2.000E-1  	5.0025000000E-2
+BIN13     	3         	80000       	5.000E-1  	2.000E-1  	5.0012500000E-2
+BIN14     	3         	160000      	4.750E-1  	2.000E-1  	5.0006250000E-2
+BIN15     	2         	320000      	2.000E-1  	5.0003125000E-2
+BIN16     	2         	640000      	2.000E-1  	5.0001562500E-2
+BIN17     	2         	1280000     	2.000E-1  	5.0000800000E-2
+BIN18     	2         	2560000     	2.000E-1  	5.0000400000E-2
+BIN19     	2         	5120000     	2.000E-1  	5.0000200000E-2
+BIN20     	1         	10240000    	5.0000100000E-2
+BIN21     	1         	20480000    	5.0000050000E-2
+BIN22     	1         	40960000    	5.0000025000E-2
+BIN23     	1         	81920000    	5.0000012500E-2
+BIN24     	1         	163840000   	5.0000006250E-2
+BIN25     	1         	327680000   	5.0000003125E-2
+}
+
+@BINOptions {
+	
+#InputArrheniusParameter  Input_ArrheniusGlobal_001.txt
+#BINDensities 		BIN5 1100	BIN25 1850
+#SootStart			BIN5
+#SootAggregateShape FractalDimension 1.80
+#PrimaryParticle 	BIN12
+#NumberOfDifferentPrimaryParticles 3
+#PrimaryParticleMin BIN5
+#PrimaryParticleMax BIN22
+#LiquidParticles    true
+#BINRadical			true
+#BINRadicalMax		BIN3 KEEP_BINJ
+#WriteToExistingThermoCKT	CKTmaster.CKT
+#WriteToExistingTransport	TRCmaster.TRC
+#BIN_CollisionEfficiency    Sphere_6D_functionLogDp 0.21 0.285 0.56 0.388 0.763 1.5 3e-20 1 5e-20 0.5 5e-19 0
+#BINGas_CollisionEfficiency true
+#BINGas_SplitRef A          1.6e10
+#PAHBIN_CollisionEfficiency Saggese
+#PAHBIN_nCAdjustment  0.166666667 // from D'Anna et al., Combustion and Flame 157 (11) 2010 2106-2115
+#BINBIN_nCAdjustment  0.166666667  
+
+#UseANimplementationForOxidation        true;
+#UseANimplementationForBINJBINJ         true;
+#UseANimplementationForPAHmPAHm         true;
+#UseANimplementationForPAHBIN           false;
+
+#UseANimplementationForBINliqCollEff    true; // (default: false. If true, you can play with the two additional parameters below)
+#CollEffUnityFromBIN 26	 // (default: 26) BINsection from which collision efficiency is = 1. For smaller BINs, collision efficiency depends on T,Dp,H/C.
+#AbinParLiqUpToBIN   4   // (default: 4) BINsection-x for BIN-y + BIN-z reactions (with 5 <= y,z <= x) up to which reference pre-exponential factor is modified to "AbinParLiq" (see Input_ArrheniusGlobal.txt).
+
+}
+
+@PAHMoleculeList {
+C6H6			6	6
+C7H8			7	8
+C6H5C2H			8	6
+C6H5C2H3		8	8
+XYLENE			8	10
+C6H5C2H5		8	10
+INDENE			9	8
+C10H8			10	8
+C10H7CH3		11	10
+C12H8			12	8
+BIPHENYL		12	10
+FLUORENE		13	10
+C6H5CH2C6H5		13	12
+C14H10			14	10
+C6H5CCC6H5 		14  10 // DIPHENYLACETYLENE added by LPM in PAH model
+C13H8CH2 		14  10 // METHYLENEFLUORENE added by LPM in PAH model
+C6H5C2H4C6H5		14	14
+C16H10			16	10
+C18H10			18	10
+C18H14			18	14 
+
+}
+
+@PAHRadicalList {
+C6H5			6	5	0
+C7H7			7	7	1
+CH3C6H4			7	7	0
+C6H4C2H			8	5	0
+C6H5C2H2		8	7	0
+RXYLENE			8	9	1
+INDENYL			9	7	1
+C10H7			10	7	0
+C10H7CH2		11	9	1
+C10H6CH3		11	9	0
+C12H7			12	7	0
+C12H9			12	9	0
+C14H9			14	9	0
+C16H9			16	9	0
+C18H9			18	9	0
+
+}
+
+@SurfaceGrowthList {
+C3H3      3   3   5.0E9   0.0   3000        0.4E9    0.0    19000
+C4H5      4   5   5.0E9   0.0   1000        0.5E9    0.0     5000				   
+C4H3      4   3   5.0E9   0.0   3000        0.5E9    0.0     5000				        
+C5H5      5   5   2.0E9   0.0   3000        0.4E9    0.0    23000				      
+
+}
+
+@HFAbstractionList //(mandatory)
+{
+	H         0    1    0    H2        0    2    0      4.81300E+03  2.0  10480.03
+	OH        0    1    1    H2O       0    2    1      7.98800E+02  2.0  2267.44
+	CH3       1    3    0    CH4       1    4    0      7.80600E+01  2.0  11601.78
+}
+
+@HBAbstractionList { //(mandatory)
+     // C H O   is added for future use <generalized stoi balance as of now oxygen element is not used.
+H2  	0 2 0   H  		0 1 0     	.1895E+03  2.0     2710.27	//H2     H       .1895E+03  2.0     2710.27
+CH4    	1 4 0 	CH3     1 3 0 		.9473E+02  2.0     4854.35 	//CH4    CH3     .9473E+02  2.0     4854.35
+H2O 	0 2 1   OH   	0 1 1   	.1353E+03  2.0     7946.24	//H2O    OH      .1353E+03  2.0     7946.24
+
+}
+
+@ExtraSpeciesForBIN1 {
+ //Molecule C  H O      Radical   C H O
+C16H10 	   16 10 0		C16H9 	 16 9 0   // to decompose bin1 to pah
+DECALIN    10 18 0		RDECALIN 10 17 0  // to decompose bin1 to pah
+
+}

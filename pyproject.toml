@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nn4soot"
+version = "1.0.0"
+description = "Integrated Neural Network Approach for Soot Kinetic Modeling"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Feixue Cai", email = "feixue.cai@example.com"}
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "numpy>=1.20.0",
+    "pandas>=1.3.0",
+    "scipy>=1.7.0",
+    "torch>=1.9.0",
+    "scikit-learn>=0.24.0",
+    "matplotlib>=3.4.0",
+    "openpyxl>=3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/feixuecai/NN4Soot"
+Documentation = "https://github.com/feixuecai/NN4Soot#readme"
+Repository = "https://github.com/feixuecai/NN4Soot.git"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]

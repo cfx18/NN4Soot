@@ -1,0 +1,37 @@
+# NN4Soot sensitivity analysis config
+# Run: python scripts/run_sensitivity_analysis.py --config configs/sensitivity_analysis_config.yaml
+
+# ─── Global paths ─────────────────────────────────────────────────────────────────
+data_dir:    data/          # Data root; must contain UF_set1/ UF_set2/ UF_set3/
+model_dir:   pretrained/    # Model directory
+output_dir:  results/       # Output root; actual writes go to {output_dir}/UF_set{X}/Hp{hp}/
+
+# ─── Analysis parameters ─────────────────────────────────────────────────────────────────
+analysis:
+  uf_sets:        [1, 2, 3]            # UF sets to analyze
+  hp_values:      [0.50, 0.70, 1.00]   # Height positions (cm)
+  n_bootstrap:   1000                  # Bootstrap sample count
+  bin_indices:    [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]  # BIN indices to analyze
+
+# ─── Output control ─────────────────────────────────────────────────────────────────
+output:
+  save_csv:       true                  # Whether to save intermediate .csv files (plots always saved)
+  save_plots:     true                  # Whether to save plots (always true)
+
+# ─── Per UF set config ───────────────────────────────────────────────────────────
+uf_sets:
+
+  UF_set1:
+    enabled: true
+    uf_value: 2          # UF value in data files
+    run_valley: false    # Whether to run valley analysis
+
+  UF_set2:
+    enabled: true
+    uf_value: 5
+    run_valley: false
+
+  UF_set3:
+    enabled: true
+    uf_value: 10
+    run_valley: true     # Valley analysis runs only on UF_set3

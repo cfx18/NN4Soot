@@ -1,0 +1,67 @@
+//********************************************************************************************
+//@Reaction {"Reactant1","Reactant2","Productmain","ProductGas"}, i.e., Reactant1 + Reactant2 --> Productmain + ProductGas
+//@Reaction { "R_Abstraction"} is an exception to call R+BIN>RH+BINJ reaction
+//********************************************************************************************
+
+@Reaction  { "PAHRadical", "PAHRadical","BIN",""}                   // 1. 2C10H7CH2, C10H6CH3+C10H7CH2, 2C10H6CH3 skipped: use the one in PAH module
+@Reaction  { "PAHRadical", "PAHMolecule", "BIN", ""}                // 2. C10H7CH2+C10H7CH3, C10H6CH3+C10H7CH3 skipped: use the one in PAH module
+@Reaction  { "PAHMolecule", "PAHMolecule", "BIN", ""}               // 3. 
+@Reaction  { "BIN", "PAHRadical", "BIN", ""}                        // 4. all BINs          
+@Reaction  { "BINJ", "PAHRadical", "BIN", ""}                       // 5. up to BIN3  
+@Reaction  { "BINJ", "PAHMolecule", "BIN", ""}                      // 6. all BINs 
+@Reaction  { "BINJ", "BINJ", "BIN", ""}                             // 7. BIN1-3+ allBINs 
+@Reaction  { "BINJ", "BIN", "BIN", ""}                              // 8. up to BIN3 
+@Reaction  { "BIN", "BIN", "BIN", ""}                               // 9. all BINs
+@Reaction  { "C2H2", "BINJ", "BIN", "" }                            // 10. up to BIN3
+@Reaction  { "C2H2", "BINJ", "BINJ", ""}                            // 11. all BINs
+@Reaction  { "SurfaceGrowthResonantRadicals", "BIN", "BIN", "" }    // 12. all BINs
+@Reaction  { "SurfaceGrowthResonantRadicals", "BINJ", "BIN", "" }   // 13. up to BIN3
+@Reaction  { "BINJ","H", "BIN", ""}                                 // 14. up to BIN3
+@Reaction  { "", "BIN", "BINJ",""}                                  // 15. up to BIN3
+@Reaction  { "BINJ", "", "BIN", ""}                                 // 16. up to BIN3
+@Reaction  { "BIN", "", "BIN", "H2"}                                // 17. up to BIN3
+@Reaction  { "BINJ", "", "BINJ", "H2"}                              // 18. all BINs
+@Reaction  { "H", "BIN", "BIN", "CH3"}                              // 19. all BINs
+@Reaction  { "CH3", "BIN", "BIN", "" }                              // 20. all BINs
+@Reaction  { "HFAbstraction", "BIN", "BINJ", "" }                   // 21f. up to BIN3, checked
+@Reaction  { "HBAbstraction", "BINJ", "BIN", "" }                   // 21b. up to BIN3, checked
+
+//!!!Check CSOLID formation from BINC oxidation
+
+@Reaction  { "OH", "BIN", "BIN", "CO+CH3"}                          // 22. all BINs
+@Reaction  { "OH", "BIN", "BINJ", "CH2CO"}                          // 23. all BINs 
+@Reaction  { "OH", "BINJ", "BINJ", "CO+H"}                          // 24. all BINs 
+@Reaction  { "OH", "BIN", "BIN", "HCO" }                            // 25. all BINs 
+@Reaction  { "O", "BIN", "BINJ", "HCCO"}                            // 26. all BINs 
+@Reaction  { "O", "BINJ", "BINJ", "CO" }                            // 27. all BINs 
+@Reaction  { "HO2", "BINJ", "BINJ", "OH+CO" }                       // 28. all BINs 
+@Reaction  { "O2", "BINJ", "BIN", "CO+HCO"}                         // 29. up to BIN3
+@Reaction  { "O2", "BINJ", "BINJ", "CO2" }                          // 30. from BIN4, fix scaling factor
+@Reaction  { "O2", "BINJ", "BINJ", "CO+H2O" }                       // 31. from BIN4, fix scaling factor
+@Reaction  { "O2", "BINJ", "BINJ", "CO+O" }                         // 32. all BINs, fix scaling factor 
+@Reaction  { "O2", "BINJ", "BIN", "2CO" }                           // 33. all BINs, fix scaling factor   
+
+@Reaction  { "BINJ", "", "LiquidToSolidJ", "" }                     // 34. From liquid-like to solid particles
+
+@Reaction  { "NH2", "BINJ", "BINJ", "H+HCN" }
+@Reaction  { "NH2", "BIN", "BIN", "H+HCN" }
+
+//********************************************************************************************
+@GlobalValue {
+	
+    AbinParLiq                      4.0e10;	//4.0e10								// A factor for L + L
+	AbinParbinAgg 	 				4.0e10; //4.0e10								// A factor for L + S
+ 	AbinAggbinAgg 	 				4.0e10; //4.0e10								// A factor for S + S
+
+	Aradrad 	 					5.00E+09;		//A factor of the reference reaction for radical-radical reactions  m3/kmol/s
+	Eradrad_NonResonant_Resonant 	3000;			//Activation energy of the reference reaction for (PAH/BIN)radical-radical reactions (one resonant, one not)
+	Eradrad_Resonant 	 			6000;			//Activation energy of the reference reaction for (BIN/BIN)radical-radical reactions (both resonant)   
+    
+    Apahbin1 	 					2.0E+12;      	// 5E+12 from MV, 2E+12 from thesis, 5E+11 from default
+    npahbin1 	 					0.5;		  	// 0 from MV, 0.5 from thesis and default
+		
+	A_LiquidToSolid                 1.8E+6; //reference pre-exponential factor for Graphitization (from liq to solid)
+	E_LiquidToSolid                 27000;  //reference activation energy factor for Graphitization (from liq to solid)
+	
+}
+
