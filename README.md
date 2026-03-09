@@ -141,7 +141,7 @@ If you use NN4Soot in your research, please cite:
 ```bibtex
 @unpublished{cai2026nn4soot,
   author = {Feixue Cai and Patrizia Crepaldi and Andrea Nobili and Matthew J. Cleary and Zhuyin Ren and Assaad R. Masri and Tiziano Faravelli},
-  title = {NN4Soot: Integrated Neural Network Approach for Autonomous Sensitivity Analysis and Optimization of Sectional Soot Kinetic Modeling},
+  title = {Integrated Neural Network Approach for Autonomous Sensitivity Analysis and Optimization of Sectional Soot Kinetic Modeling},
   note = {Under review, submitted to Proceedings of the Combustion Institute},
   year = {2026}
 }
