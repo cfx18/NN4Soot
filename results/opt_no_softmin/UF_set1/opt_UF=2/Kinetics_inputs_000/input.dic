@@ -18,6 +18,12 @@ Dictionary CHEMKIN_PreProcessor
 		@Transport		transport.CHEMKIN.TRC;
 		@Kinetics 		kinetics.CHEMKIN_base3pp.CKI;
 
+			@SootProperties     	BinProperties.txt;
+	        @CheckThermodynamics    true;
+        	@ReverseFitting         true;
+        	@SpeciesBundling    	true;
+        	@TransportFittingCoefficients   true;
+
 		@Output			kinetics-base3_000;
 		
 		@Comments 		CRECK-Signature;
